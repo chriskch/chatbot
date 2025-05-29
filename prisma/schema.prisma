@@ -1,0 +1,86 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["crm", "oms", "payment", "pms"]
+}
+
+model Customer {
+  id              Int             @id @default(autoincrement())
+  name            String?         @db.VarChar(100)
+  email           String?         @db.VarChar(100)
+  phone           String?         @db.VarChar(20)
+  createdAt       DateTime?       @default(now()) @map("created_at") @db.Timestamp(6)
+  support_tickets SupportTicket[]
+  orders          Order[]
+
+  @@map("customers")
+  @@schema("crm")
+}
+
+model SupportTicket {
+  id          Int       @id @default(autoincrement())
+  customer_id Int?
+  subject     String?   @db.VarChar(100)
+  status      String?   @db.VarChar(20)
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  customers   Customer? @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("support_tickets")
+  @@schema("crm")
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  customer_id Int?
+  status      String?     @db.VarChar(30)
+  createdAt   DateTime?   @default(now()) @map("created_at") @db.Timestamp(6)
+  order_items OrderItem[]
+  customers   Customer?   @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payments    Payment[]
+
+  @@map("orders")
+  @@schema("oms")
+}
+
+model OrderItem {
+  id         Int      @id @default(autoincrement())
+  order_id   Int?
+  product_id Int?
+  quantity   Int?
+  price      Decimal? @db.Decimal(10, 2)
+  orders     Order?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("order_items")
+  @@schema("oms")
+}
+
+model Product {
+  id        Int       @id @default(autoincrement())
+  name      String?   @db.VarChar(100)
+  sku       String?   @db.VarChar(50)
+  price     Decimal?  @db.Decimal(10, 2)
+  stock     Int?
+  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+
+  @@map("products")
+  @@schema("pms")
+}
+
+model Payment {
+  id          Int       @id @default(autoincrement())
+  order_id    Int
+  amount      Decimal   @db.Decimal(10, 2)
+  status      String    @db.VarChar(30)
+  method      String?   @db.VarChar(30)
+  paid_at     DateTime? @db.Timestamp(6)
+  refunded_at DateTime? @db.Timestamp(6)
+  orders      Order     @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_order")
+
+  @@map("payments")
+  @@schema("payment")
+}
