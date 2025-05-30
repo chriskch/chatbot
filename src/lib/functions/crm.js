@@ -65,7 +65,7 @@ export async function createSupportTicket({ customer_id, subject }) {
 export async function getSupportTickets({ customer_id }) {
   const tickets = await prisma.supportTicket.findMany({
     where: { customer_id },
-    orderBy: { createdAt: "desc" },
+    orderBy: { id: "desc" },
   });
 
   return tickets;

@@ -7,21 +7,21 @@ export async function createOrder({ customer_id, product_ids }) {
   });
 
   const items = products.map((product) => ({
-    productId: product.id,
+    product_id: product.id,
     quantity: 1, // oder aus Parameter übergeben
     price: product.price,
   }));
 
   const order = await prisma.order.create({
     data: {
-      customerId: customer_id,
+      customer_id,
       status: "processing",
-      items: {
+      order_items: {
         create: items,
       },
     },
     include: {
-      items: true,
+      order_items: true,
     },
   });
 

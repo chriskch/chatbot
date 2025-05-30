@@ -21,7 +21,7 @@ export async function refundPayment({ order_id }) {
     where: { order_id, status: "paid" },
     data: {
       status: "refunded",
-      refundedAt: new Date(),
+      refunded_at: new Date(),
     },
   });
 
