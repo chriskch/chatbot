@@ -48,11 +48,20 @@ export async function updateCustomerPhone({ id, newPhone }) {
  * Erstellt ein neues Support-Ticket für einen Kunden.
  */
 export async function createSupportTicket({ customer_id, subject }) {
+  const lastTicket = await prisma.supportTicket.findFirst({
+    orderBy: { id: "desc" },
+    select: { id: true },
+  });
+
+  const nextId = (lastTicket?.id || 0) + 1;
+  const ticketNumber = `T${nextId.toString().padStart(3, "0")}`;
+
   const ticket = await prisma.supportTicket.create({
     data: {
       customer_id,
       subject,
       status: "open",
+      ticket_number: ticketNumber,
     },
   });
 
@@ -79,6 +88,16 @@ export async function updateSupportTicketStatus({ ticket_id, status }) {
     where: { id: ticket_id },
     data: { status },
   });
+
+  return ticket;
+}
+
+export async function getTicketByNumber({ ticket_number }) {
+  const ticket = await prisma.supportTicket.findUnique({
+    where: { ticket_number },
+  });
+
+  if (!ticket) throw new Error("Ticket not found");
 
   return ticket;
 }

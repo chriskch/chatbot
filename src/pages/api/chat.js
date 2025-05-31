@@ -13,11 +13,13 @@ const functionMap = {
   createSupportTicket: crm.createSupportTicket,
   getSupportTickets: crm.getSupportTickets,
   updateSupportTicketStatus: crm.updateSupportTicketStatus,
+  getTicketByNumber: crm.getTicketByNumber,
 
   createOrder: oms.createOrder,
   getOrderStatus: oms.getOrderStatus,
   cancelOrder: oms.cancelOrder,
   getOrdersByCustomer: oms.getOrdersByCustomer,
+  getOrderByNumber: oms.getOrderByNumber,
 
   getProductDetails: pms.getProductDetails,
   listProductsByCategory: pms.listProductsByCategory,

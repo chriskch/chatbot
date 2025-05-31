@@ -85,6 +85,17 @@ export const functions = [
       required: ["ticket_id", "status"],
     },
   },
+  {
+    name: "getTicketByNumber",
+    description: "Retrieves a support ticket by its unique ticket number",
+    parameters: {
+      type: "object",
+      properties: {
+        ticket_number: { type: "string", description: "e.g. T001" },
+      },
+      required: ["ticket_number"],
+    },
+  },
 
   // OMS
   {
@@ -133,6 +144,34 @@ export const functions = [
         customer_id: { type: "number" },
       },
       required: ["customer_id"],
+    },
+  },
+  {
+    name: "getOrderByNumber",
+    description: "Finds a specific order using the order number (e.g. OR123)",
+    parameters: {
+      type: "object",
+      properties: {
+        order_number: {
+          type: "string",
+          description: "The order number to search for",
+        },
+      },
+      required: ["order_number"],
+    },
+  },
+  {
+    name: "getTrackingInfo",
+    description: "Returns tracking information for a specific tracking number",
+    parameters: {
+      type: "object",
+      properties: {
+        tracking_number: {
+          type: "string",
+          description: "Tracking number like T123456",
+        },
+      },
+      required: ["tracking_number"],
     },
   },
 
