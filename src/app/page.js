@@ -7,14 +7,7 @@ export default function Home() {
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 bg-black text-white font-sans">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start text-center sm:text-left max-w-2xl">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
+        <Image src="/Logo.svg" alt="Logo" width={300} height={68} priority />
 
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
           E-Commerce Chatbot – Demo & Teststrategie
@@ -46,7 +39,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by Next.js
+          Powered by Studio eunoia
         </a>
         <a
           className="hover:underline underline-offset-4"

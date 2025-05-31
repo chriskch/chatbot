@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Lokale Entwicklung & Deployment-Anleitung
 
-## Getting Started
+Dieses Dokument beschreibt, wie du das Projekt lokal entwickelst, testest, Prisma-Migrationen durchführst und es anschließend auf einen Ubuntu-Server deployst.
 
-First, run the development server:
+---
+
+## 🔧 Lokale Einrichtung
+
+1. **.env-Datei vorbereiten**
+   Kopiere die Umgebungsdatei für die lokale Entwicklung:
+   ```bash
+   cp .env.dev .env
+   ```
+2. **Abhängigkeiten installieren**
+   ```bash
+   npm install
+   ```
+3. **Entwicklungsumgebung starten**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🧪 Tests ausführen
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Die Tests verwenden standardmäßig die** **`.env.test`-Konfiguration.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🗄️ Prisma & Datenbank
 
-## Learn More
+### Datenbank-Migration (lokal)
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run migrate
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Datenbank-Migration für Testumgebung
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run migrate:test
+```
 
-## Deploy on Vercel
+Die Testdatenbank ist z.B.:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+postgresql://htw:htw@localhost:5432/EAM-TEST
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🚀 Deployment auf Ubuntu-Server
+
+### Voraussetzungen
+
+* SSH-Zugang zum Server
+* Node.js, npm und PostgreSQL auf dem Server installiert
+* Projektverzeichnis:** **`/var/www/html/chatbot`
+
+### Schritt-für-Schritt
+
+1. **Lokal Projekt bauen**
+   ```bash
+   npm run build
+   ```
+2. **Build auf den Server kopieren**
+   ```bash
+   scp -r .next/ public/ root@212.227.76.128:/var/www/html/chatbot/
+   ```
+3. **Server-seitig ausführen**
+   ```bash
+   pm2 stop chatbot || true
+   pm2 start npm --name chatbot -- start
+   ```
+
+---
+
+## 📁 Weitere Hinweise
+
+* Für persistente Prisma-Generierung auf dem Server ggf. lokal vorab ausführen:
+  ```bash
+  npx prisma generate
+  ```
+* Sollte der Speicher auf dem Server zu gering sein, kann der Build auch lokal erfolgen und dann übertragen werden.
+
+---
+
+ **Hinweis** : Dieses Projekt verwendet Next.js 15 mit Turbopack im Entwicklungsmodus und speichert Test- und Produktionsdatenbanken getrennt.
