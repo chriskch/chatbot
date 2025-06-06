@@ -12,7 +12,7 @@ datasource db {
 model Customer {
   id              Int             @id @default(autoincrement())
   name            String?         @db.VarChar(100)
-  email           String?         @db.VarChar(100)
+  email           String?         @unique @db.VarChar(100)
   phone           String?         @db.VarChar(20)
   createdAt       DateTime?       @default(now()) @map("created_at") @db.Timestamp(6)
   support_tickets SupportTicket[]
@@ -65,7 +65,7 @@ model OrderItem {
 model Product {
   id        Int       @id @default(autoincrement())
   name      String?   @db.VarChar(100)
-  sku       String?   @db.VarChar(50)
+  sku       String?   @unique @db.VarChar(50)
   price     Decimal?  @db.Decimal(10, 2)
   stock     Int?
   category  String?   @db.VarChar(50) // z.B. "Küche", "Elektronik"

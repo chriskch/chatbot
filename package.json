@@ -10,10 +10,14 @@
     "lint": "next lint",
     "test": "vitest run",
     "migrate": "npx prisma db push",
-    "migrate:test": "DATABASE_URL='postgresql://htw:htw@localhost:5432/EAM-TEST' npx prisma db push"
+    "migrate:test": "dotenv -e .env.test -- npx prisma db push",
+    "seed:test": "dotenv -e .env.test -- npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.8.2",
+    "@prisma/client": "^6.9.0",
     "next": "15.3.2",
     "openai": "^4.103.0",
     "react": "^19.0.0",
@@ -24,9 +28,10 @@
     "@tailwindcss/postcss": "^4",
     "@vitest/ui": "^3.1.4",
     "dotenv": "^16.5.0",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
-    "prisma": "^6.8.2",
+    "prisma": "^6.9.0",
     "tailwindcss": "^4",
     "vite": "^6.3.5",
     "vitest": "^3.1.4"

@@ -9,6 +9,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    sequence: {
+      hooks: "stack",
+    },
     setupFiles: ["./tests/setup.js"],
   },
   resolve: {

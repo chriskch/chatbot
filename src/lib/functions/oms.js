@@ -20,12 +20,6 @@ export async function createOrder({ customer_id, product_ids }) {
   const orderNumber = `OR${nextOrderId.toString().padStart(3, "0")}`;
   const trackingNumber = `T${Math.floor(100000 + Math.random() * 900000)}`;
 
-  console.log("Creating order:", {
-    customer_id,
-    orderNumber,
-    trackingNumber,
-  });
-
   const order = await prisma.order.create({
     data: {
       customer_id,
