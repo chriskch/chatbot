@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chatbot-app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://htw:htw@db:5432/EAM
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_API_COMPLETIONS: ${OPENAI_API_COMPLETIONS}
+      OPENAI_API_RESPONSES: ${OPENAI_API_RESPONSES}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: chatbot-db
+    environment:
+      POSTGRES_USER: htw
+      POSTGRES_PASSWORD: htw
+      POSTGRES_DB: EAM
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+volumes:
+  pgdata:
