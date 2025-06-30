@@ -1,5 +1,5 @@
-import { prisma } from "../src/configs/prisma";
-import { beforeAll, afterAll, beforeEach, afterEach } from "vitest";
+import { prisma } from "../../src/configs/prisma";
+import { beforeAll, beforeEach, afterEach } from "vitest";
 
 beforeAll(async () => {
   // Hole IDs aus der bereits gesäten Datenbank

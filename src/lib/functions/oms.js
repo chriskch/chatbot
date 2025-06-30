@@ -11,13 +11,8 @@ export async function createOrder({ customer_id, product_ids }) {
     price: product.price,
   }));
 
-  const lastOrder = await prisma.order.findFirst({
-    orderBy: { id: "desc" },
-    select: { id: true },
-  });
-
-  const nextOrderId = (lastOrder?.id || 0) + 1;
-  const orderNumber = `OR${nextOrderId.toString().padStart(3, "0")}`;
+  const count = await prisma.order.count();
+  const orderNumber = `OR${(count + 1).toString().padStart(3, "0")}`;
   const trackingNumber = `T${Math.floor(100000 + Math.random() * 900000)}`;
 
   const order = await prisma.order.create({
@@ -84,9 +79,7 @@ export async function getOrdersByCustomer({ customer_id }) {
     },
   });
 
-  const allProductIds = orders.flatMap((order) =>
-    order.order_items.map((item) => item.product_id)
-  );
+  const allProductIds = orders.flatMap((order) => order.order_items.map((item) => item.product_id));
 
   const products = await prisma.product.findMany({
     where: { id: { in: allProductIds } },

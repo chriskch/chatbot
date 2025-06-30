@@ -12,7 +12,7 @@ export default defineConfig({
     sequence: {
       hooks: "stack",
     },
-    setupFiles: ["./tests/setup.js"],
+    setupFiles: ["./tests/unit/setup.js"],
   },
   resolve: {
     alias: {
