@@ -52,9 +52,7 @@ jobs:
           echo "App is ready."
 
       - name: Run database migrations
-        run: npx prisma db push
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run migrate
 
       - name: Run seed script
         run: npm run seed

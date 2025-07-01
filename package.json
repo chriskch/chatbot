@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "migrate": "npx prisma db push",
+    "migrate": "dotenv -e .env.test -- npx prisma db push",
     "seed": "npx prisma db seed",
     "loadtest": "locust -f ./tests/performance/locustfile.py --host=http://localhost:3000 --headless -u 10 -r 2 -t 30s --csv=tests/results/report",
     "fairness": "python3 ./tests/bias/fairness.py",
