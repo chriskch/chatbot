@@ -9,7 +9,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgres://htw:htw@db:5432/EAM
+      DATABASE_URL: ${DATABASE_URL}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_API_COMPLETIONS: ${OPENAI_API_COMPLETIONS}
       OPENAI_API_RESPONSES: ${OPENAI_API_RESPONSES}
@@ -23,9 +23,9 @@ services:
       - "5432:5432"
     container_name: chatbot-db
     environment:
-      POSTGRES_USER: htw
-      POSTGRES_PASSWORD: htw
-      POSTGRES_DB: EAM
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U test"]
       interval: 5s
