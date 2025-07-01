@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
+  tests:
     name: 🐳 Compose Tests
     runs-on: ubuntu-latest
 
@@ -27,13 +27,26 @@ jobs:
       - name: Install dependencies for test runner
         run: npm ci
 
+      - name: Create .env.test file from GitHub Secrets
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env.test
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env.test
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.test
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env.test
+          echo "OPENAI_API_COMPLETIONS=${{ secrets.OPENAI_API_COMPLETIONS }}" >> .env.test
+          echo "OPENAI_API_RESPONSES=${{ secrets.OPENAI_API_RESPONSES }}" >> .env.test
+          echo "OPENAI_MODEL=${{ secrets.OPENAI_MODEL }}" >> .env.test
+
       - name: Build and start services with Docker Compose
         run: docker compose --env-file .env.test up -d --build
 
       - name: Wait for app to be ready
         run: |
           echo "Waiting for app to be ready..."
-          until curl --fail http://localhost:3000/api/health || curl --fail http://localhost:3000; do
+          until curl --fail http://localhost:3000; do
             sleep 2
           done
           echo "App is ready."
