@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    name: 🐳 Compose Tests
+    name: 🐳 CI
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +38,7 @@ jobs:
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env.test
           echo "OPENAI_API_COMPLETIONS=${{ secrets.OPENAI_API_COMPLETIONS }}" >> .env.test
           echo "OPENAI_API_RESPONSES=${{ secrets.OPENAI_API_RESPONSES }}" >> .env.test
-          echo "OPENAI_MODEL=${{ secrets.OPENAI_MODEL }}" >> .env.test
+          echo "OPENAI_API_MODEL=${{ secrets.OPENAI_API_MODEL }}" >> .env.test
 
       - name: Build and start services with Docker Compose
         run: docker compose --env-file .env.test up -d --build
@@ -50,6 +50,12 @@ jobs:
             sleep 2
           done
           echo "App is ready."
+
+      - name: Run database migrations
+        run: npm run migrate:test
+
+      - name: Run seed script
+        run: npm run seed:test
 
       - name: Run unit tests
         run: npm run test
