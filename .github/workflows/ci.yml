@@ -52,10 +52,10 @@ jobs:
           echo "App is ready."
 
       - name: Run database migrations
-        run: npm run migrate:test
+        run: npm run migrate
 
       - name: Run seed script
-        run: npm run seed:test
+        run: npm run seed
 
       - name: Run unit tests
         run: npm run test
