@@ -26,10 +26,7 @@ services:
       POSTGRES_USER: htw
       POSTGRES_PASSWORD: htw
       POSTGRES_DB: EAM
-    volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U test"]
       interval: 5s
-      timeout: 5s
       retries: 5
