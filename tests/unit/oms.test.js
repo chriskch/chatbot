@@ -1,38 +1,19 @@
-import {
-  createOrder,
-  getOrderStatus,
-  cancelOrder,
-  getOrdersByCustomer,
-} from "@/lib/functions/oms";
+import { createOrder, getOrderStatus, cancelOrder, getOrdersByCustomer } from "@/lib/functions/oms";
+import { testContext } from "./testContext";
+import { describe, it, expect } from "vitest";
 
-import { prisma } from "@/configs/prisma";
+describe("OMS Module", () => {
+  const customerId = () => testContext.customerId;
+  const productIds = () => testContext.productIds;
 
-describe("OMS-Funktionen", () => {
-  let customer;
-  let products;
-
-  beforeAll(async () => {
-    customer = await prisma.customer.findUnique({
-      where: { email: "besteller@example.com" },
-    });
-
-    products = await prisma.product.findMany({
-      orderBy: { id: "asc" },
-    });
-
-    if (!customer || products.length < 2) {
-      throw new Error("Seed data missing. Run `npm run seed:test` first.");
-    }
-  });
-
-  it("legt eine Bestellung mit Produkten an", async () => {
+  it("creates an order with products", async () => {
     const order = await createOrder({
-      customer_id: customer.id,
-      product_ids: [products[0].id, products[1].id],
+      customer_id: customerId(),
+      product_ids: [productIds()[0], productIds()[1]],
     });
 
     expect(order).toMatchObject({
-      customer_id: customer.id,
+      customer_id: customerId(),
       status: "processing",
     });
 
@@ -41,10 +22,10 @@ describe("OMS-Funktionen", () => {
     expect(order.order_items[0]).toHaveProperty("price");
   });
 
-  it("liefert Statusinformationen einer Bestellung", async () => {
+  it("returns status information for an order", async () => {
     const newOrder = await createOrder({
-      customer_id: customer.id,
-      product_ids: [products[0].id],
+      customer_id: customerId(),
+      product_ids: [productIds()[0]],
     });
 
     const status = await getOrderStatus({ order_id: newOrder.id });
@@ -54,13 +35,13 @@ describe("OMS-Funktionen", () => {
       status: "processing",
     });
 
-    expect(status.items[0].product_id).toBe(products[0].id);
+    expect(status.items[0].product_id).toBe(productIds()[0]);
   });
 
-  it("storniert eine Bestellung erfolgreich", async () => {
+  it("successfully cancels an order", async () => {
     const newOrder = await createOrder({
-      customer_id: customer.id,
-      product_ids: [products[0].id],
+      customer_id: customerId(),
+      product_ids: [productIds()[0]],
     });
 
     const cancelled = await cancelOrder({ order_id: newOrder.id });
@@ -70,22 +51,23 @@ describe("OMS-Funktionen", () => {
     expect(status.status).toBe("cancelled");
   });
 
-  it("liefert alle Bestellungen eines Kunden mit Produktdetails", async () => {
-    // Lege 2 neue Bestellungen an
+  it("returns all orders for a customer with product details", async () => {
+    // Create 2 new orders
     await createOrder({
-      customer_id: customer.id,
-      product_ids: [products[0].id],
+      customer_id: customerId(),
+      product_ids: [productIds()[0]],
     });
 
     await createOrder({
-      customer_id: customer.id,
-      product_ids: [products[1].id],
+      customer_id: customerId(),
+      product_ids: [productIds()[1]],
     });
 
-    const orders = await getOrdersByCustomer({ customer_id: customer.id });
+    const orders = await getOrdersByCustomer({ customer_id: customerId() });
     expect(orders.length).toBeGreaterThanOrEqual(2);
 
     for (const order of orders) {
+      expect(order).toHaveProperty("items");
       for (const item of order.items) {
         expect(item).toHaveProperty("product_name");
         expect(item).toHaveProperty("quantity");
