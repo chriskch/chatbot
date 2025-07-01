@@ -12,7 +12,7 @@
     "migrate": "npx prisma db push",
     "migrate:test": "dotenv -e .env.test -- npx prisma db push",
     "seed:test": "dotenv -e .env.test -- npx prisma db seed",
-    "loadtest": "locust -f locustfile.py --host=http://localhost:3000 --headless -u 10 -r 2 -t 30s --csv=tests/results/report",
+    "loadtest": "locust -f ./tests/performance/locustfile.py --host=http://localhost:3000 --headless -u 10 -r 2 -t 30s --csv=tests/results/report",
     "fairness": "python3 ./tests/bias/fairness.py",
     "promptfoo": "npx promptfoo eval --config /tests/prompts/promptfooconfig.yaml --output tests/results/promptfoo-report.json"
   },
