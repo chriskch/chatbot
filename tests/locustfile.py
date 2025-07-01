@@ -1,31 +1,41 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, task, constant
 from random import choice
 
+
 class ChatbotUser(HttpUser):
-    wait_time = between(1, 2)  # Simuliert realistische Wartezeiten zwischen Anfragen
+    wait_time = constant(1)  # Wartezeit zwischen den Requests
 
     prompts = [
         {
-            "prompt": "Wie ist der Status meiner Bestellung?",
+            "messages": [
+                {"role": "user", "content": "Wie ist der Status meiner Bestellung mit der Bestellnummer OR003?"}
+            ],
             "expected_keywords": ["status", "bestellung"]
         },
         {
-            "prompt": "Was ist meine letzte Bestellung?",
+            "messages": [
+                {"role": "user", "content": "Was ist meine letzte Bestellung?"}
+            ],
             "expected_keywords": ["letzte", "bestellung"]
         },
         {
-            "prompt": "Wo ist meine Bestellung 001?",
-            "expected_keywords": ["bestellung", "001"]
+            "messages": [
+                {"role": "user", "content": "Wo ist meine Bestellung mit der Bestellnummer OR003?"}
+            ],
+            "expected_keywords": ["bestellung", "OR003"]
         }
     ]
 
     @task
     def send_prompt(self):
         test_case = choice(self.prompts)
-        prompt = test_case["prompt"]
+        messages = test_case["messages"]
         expected_keywords = test_case["expected_keywords"]
 
-        payload = {"message": prompt}
+        payload = {
+            "messages": messages,
+            "customer": {"name": "Besteller Bot", "id": 696}
+        }
 
         with self.client.post("/api/chat", json=payload, catch_response=True) as response:
             try:
@@ -34,12 +44,18 @@ class ChatbotUser(HttpUser):
                 response.failure(f"❌ Ungültiges JSON: {e} | Antwort: {response.text}")
                 return
 
-            # Versuche, die Antwort zu extrahieren (je nach API ggf. "message", "response", etc.)
-            answer = data.get("response") or data.get("message") or ""
-            
-            if not answer:
-                response.failure(f"⚠️ Leere Antwort erhalten: {data}")
-            elif all(word.lower() in answer.lower() for word in expected_keywords):
-                response.success()
+            # Überprüfe, ob die API mit 'reply' geantwortet hat
+            if data.get("status") == "reply":
+                answer = data.get("reply", "")
+                if not answer:
+                    response.failure(f"⚠️ Leere Antwort erhalten: {data}")
+                elif all(word.lower() in answer.lower() for word in expected_keywords):
+                    response.success()
+                else:
+                    response.failure(
+                        f"❌ Semantisch inkorrekte Antwort. Prompt: '{messages}' | Antwort: '{answer}'"
+                    )
+            elif data.get("status") == "function_call":
+                response.success()  # Wenn Function Call korrekt erkannt wurde
             else:
-                response.failure(f"❌ Semantisch inkorrekte Antwort. Prompt: '{prompt}' | Antwort: '{answer}'")
+                response.failure(f"⚠️ Unerwartetes Antwortformat: {data}")

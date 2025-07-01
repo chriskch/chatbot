@@ -19,15 +19,17 @@ services:
 
   db:
     image: postgres:15
+    ports:
+      - "5432:5432"
     container_name: chatbot-db
     environment:
       POSTGRES_USER: htw
       POSTGRES_PASSWORD: htw
       POSTGRES_DB: EAM
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
-
-volumes:
-  pgdata:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -35,13 +35,12 @@ export default async function handler(req, res) {
     if (!customer) {
       return res.status(200).json({
         status: "reply",
-        reply:
-          "Bitte wähle zuerst einen Nutzer aus, bevor du mit dem Chatbot interagierst.",
+        reply: "Bitte wähle zuerst einen Nutzer aus, bevor du mit dem Chatbot interagierst.",
       });
     }
 
     const response = await openai.chat.completions.create({
-      model: process.env.OPENAI_API_MODEL || "gpt-4-0613",
+      model: process.env.OPENAI_API_MODEL,
       messages,
       functions,
       function_call: "auto",
