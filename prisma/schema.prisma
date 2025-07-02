@@ -38,7 +38,7 @@ model SupportTicket {
 model Order {
   id              Int         @id @default(autoincrement())
   customer_id     Int?
-  order_number    String?     @db.VarChar(20) // z.B. OR123
+  order_number    String?     @unique @db.VarChar(20) // z.B. OR123
   tracking_number String?     @db.VarChar(30) // z.B. T789654
   status          String?     @db.VarChar(30)
   createdAt       DateTime?   @default(now()) @map("created_at") @db.Timestamp(6)

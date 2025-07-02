@@ -1,36 +1,61 @@
-from locust import HttpUser, task, between
-import random
+from locust import HttpUser, task, constant
+from random import choice
+
 
 class ChatbotUser(HttpUser):
-    wait_time = between(1, 3)  # realistischere Denkpausen
+    wait_time = constant(1)  # Wartezeit zwischen den Requests
 
-    def on_start(self):
-        self.user_context = {
+    prompts = [
+        {
             "messages": [
-                "Hi, can you help me?",
-                "What can you do?",
-                "Tell me a joke!",
-                "How do I reset my password?",
-                "What are your opening hours?",
-                "Can you recommend a product?",
-                "I want to cancel my order.",
-                "Thanks!"
+                {"role": "user", "content": "Wie ist der Status meiner Bestellung mit der Bestellnummer OR123?"}
             ],
-            "conversation_history": []
+            "expected_keywords": ["status", "bestellung"]
+        },
+        {
+            "messages": [
+                {"role": "user", "content": "Was war meine letzte Bestellung, die ich hier bestellt habe?"}
+            ],
+            "expected_keywords": ["letzte", "bestellung"]
+        },
+        {
+            "messages": [
+                {"role": "user", "content": "Wo ist meine Bestellung mit der Bestellnummer OR123?"}
+            ],
+            "expected_keywords": ["bestellung", "OR123"]
         }
+    ]
 
     @task
-    def start_conversation(self):
-        message = random.choice(self.user_context["messages"])
+    def send_prompt(self):
+        test_case = choice(self.prompts)
+        messages = test_case["messages"]
+        expected_keywords = test_case["expected_keywords"]
+
         payload = {
-            "message": message,
-            "history": self.user_context["conversation_history"]
+            "messages": messages,
+            "customer": {"name": "Max Mustermann", "id": 1, "email": "kunde@example.com"}
         }
 
         with self.client.post("/api/chat", json=payload, catch_response=True) as response:
-            if response.status_code == 200:
-                self.user_context["conversation_history"].append({"role": "user", "content": message})
-                self.user_context["conversation_history"].append({"role": "assistant", "content": response.json().get("reply", "")})
-                response.success()
+            try:
+                data = response.json()
+            except Exception as e:
+                response.failure(f"❌ Ungültiges JSON: {e} | Antwort: {response.text}")
+                return
+
+            # Überprüfe, ob die API mit 'reply' geantwortet hat
+            if data.get("status") == "reply":
+                answer = data.get("reply", "")
+                if not answer:
+                    response.failure(f"⚠️ Leere Antwort erhalten: {data}")
+                elif all(word.lower() in answer.lower() for word in expected_keywords):
+                    response.success()
+                else:
+                    response.failure(
+                        f"❌ Semantisch inkorrekte Antwort. Prompt: '{messages}' | Antwort: '{answer}'"
+                    )
+            elif data.get("status") == "function_call":
+                response.success()  # Wenn Function Call korrekt erkannt wurde
             else:
-                response.failure(f"Unexpected status code: {response.status_code}")
+                response.failure(f"⚠️ Unerwartetes Antwortformat: {data}")

@@ -103,7 +103,7 @@ export async function getOrdersByCustomer({ customer_id }) {
 }
 
 export async function getOrderByNumber({ order_number }) {
-  const order = await prisma.order.findUnique({
+  const order = await prisma.order.findFirst({
     where: { order_number },
     include: {
       order_items: true,

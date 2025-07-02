@@ -17,7 +17,7 @@ export default function ChatWindow({ customer }) {
       },
       {
         role: "system",
-        content: `Der aktuelle Nutzer ist ${customer.name}. E-Mail: ${customer.email}, Telefonnummer: ${customer.phone}.`
+        content: `Der aktuelle Nutzer ist ${customer.name}. E-Mail: ${customer.email}, Telefonnummer: ${customer.phone} ID: ${customer.id}.`
       }
     ]);
   }
@@ -43,12 +43,17 @@ export default function ChatWindow({ customer }) {
   const data = await response.json();
 
   // Entferne Lade-Nachricht & füge echte Antwort ein
-  setMessages([
-    ...updatedMessages,
-    { role: "assistant", content: data.reply }
-  ]);
-
-  setIsLoading(false);
+  if (data?.reply) {
+      setMessages([
+        ...updatedMessages,
+        { role: "assistant", content: data.reply }
+      ]);
+    } else {
+      setMessages([
+        ...updatedMessages,
+        { role: "assistant", content: "❌ Fehler: Keine Antwort erhalten." }
+      ]);
+    }
 };
 
   useEffect(() => {
