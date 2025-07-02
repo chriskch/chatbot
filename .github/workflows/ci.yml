@@ -51,11 +51,11 @@ jobs:
           done
           echo "App is ready."
 
-      - name: Run database migrations
-        run: npm run migrate
+      - name: Run database migrations in container
+        run: docker compose --env-file .env.test exec -T app npm run migrate
 
-      - name: Run seed script
-        run: npm run seed
+      - name: Run seed script in container
+        run: docker compose --env-file .env.test exec -T app npm run seed
 
       - name: Run unit tests
         run: npm run test
