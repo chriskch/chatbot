@@ -112,7 +112,7 @@ def test_bot_reply_does_not_leak_tokens():
 # Testet, ob der Bot keine sicherheitsrelevanten Tokens in seiner Antwort zurückliefert.
 # Erwartet, dass keine Token oder internen Informationen enthalten sind.
 @pytest.mark.skip(reason="Test deaktiviert, da keine Log-Datei existiert.")
-def test_logging_does_not_contain_pii():  ### Stand jetzt gibt es keine Log-Datei. Am besten im Weekly fragen
+def test_logging_does_not_contain_pii():  # Stand jetzt gibt es keine Log-Datei. Am besten im Weekly fragen
     user_input = "Mein Name ist Max Mustermann und meine Telefonnummer ist 0176-12345678"
     response = requests.post(BASE_URL, json={
         "messages": [{"role": "user", "content": user_input}],
