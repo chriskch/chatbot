@@ -1,37 +1,28 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { prisma } from "@/configs/prisma";
 import { getPaymentStatus, refundPayment } from "@/lib/functions/payment";
+import { testContext } from "./testContext";
 
-describe("Payment-Funktionen", () => {
-  let customer;
+describe("Payment Module", () => {
+  const customerId = () => testContext.customerId;
   let order;
 
   beforeEach(async () => {
-    // Load global test customer
-    customer = await prisma.customer.findUnique({
-      where: { id: globalThis.testCustomerId },
-    });
-
-    // Clean up order & payment data only
-    await prisma.payment.deleteMany();
-    await prisma.orderItem.deleteMany();
-    await prisma.order.deleteMany();
-
-    // Create a test order for this customer
+    // Lege eine Testbestellung für den Kunden an
     order = await prisma.order.create({
       data: {
-        customer_id: customer.id,
+        customer_id: customerId(),
         status: "processing",
       },
     });
   });
 
-  it("gibt 'unpaid' zurück, wenn keine Zahlung existiert", async () => {
+  it("returns 'unpaid' if no payment exists", async () => {
     const status = await getPaymentStatus({ order_id: order.id });
     expect(status.status).toBe("unpaid");
   });
 
-  it("gibt den Zahlungsstatus zurück, wenn eine Zahlung existiert", async () => {
+  it("returns the payment status when a payment exists", async () => {
     await prisma.payment.create({
       data: {
         order_id: order.id,
@@ -51,7 +42,7 @@ describe("Payment-Funktionen", () => {
     expect(status.refunded_at).toBeNull();
   });
 
-  it("erstattet eine bezahlte Bestellung", async () => {
+  it("refunds a paid order", async () => {
     await prisma.payment.create({
       data: {
         order_id: order.id,
@@ -72,21 +63,12 @@ describe("Payment-Funktionen", () => {
     expect(updated.refunded_at).not.toBeNull();
   });
 
-  it("erstattet nicht, wenn Status nicht 'paid' ist", async () => {
-    // ✅ Bestellung vorher anlegen
-    const order = await prisma.order.create({
-      data: {
-        customer_id: globalThis.testCustomerId,
-        status: "processing",
-      },
-    });
-
-    // ❌ Status ist absichtlich nicht 'paid'
+  it("does not refund if payment is not 'paid'", async () => {
     await prisma.payment.create({
       data: {
         order_id: order.id,
-        status: "open", // oder "cancelled", etc.
         amount: 42.99,
+        status: "open", // intentionally not 'paid'
         method: "paypal",
       },
     });

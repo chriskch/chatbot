@@ -54,6 +54,7 @@ function validateToken(req) {
 
 export default async function handler(req, res) {
   const { messages, onlyUnderstand = false, customer } = req.body;
+  const customerDescription = `Der aktuelle Kunde heißt ${customer.name} und hat die ID ${customer.id}.`;
 
 
 
@@ -69,14 +70,27 @@ export default async function handler(req, res) {
     if (!customer) {
       return res.status(200).json({
         status: "reply",
-        reply:
-          "Bitte wähle zuerst einen Nutzer aus, bevor du mit dem Chatbot interagierst.",
+        reply: "Bitte wähle zuerst einen Nutzer aus, bevor du mit dem Chatbot interagierst.",
       });
     }
 
+    const contextMessages = [
+      {
+        role: "system",
+        content:
+          "Du bist ein freundlicher Chatbot eines E-Commerce-Shops. Antworte präzise, hilfsbereit und höflich.",
+      },
+      {
+        role: "system",
+        content: `Der aktuelle Nutzer ist ${customer.name}. E-Mail: ${customer.email}, Telefonnummer: ${customer.phone} ID: ${customer.id}.`,
+      },
+    ];
+
+    const mergedMessages = [...contextMessages, ...messages];
+
     const response = await openai.chat.completions.create({
-      model: process.env.OPENAI_API_MODEL || "gpt-4-0613",
-      messages,
+      model: process.env.OPENAI_API_MODEL,
+      messages: mergedMessages,
       functions,
       function_call: "auto",
     });
@@ -119,7 +133,7 @@ export default async function handler(req, res) {
 
       // 3. GPT um Antwort bitten
       const final = await openai.chat.completions.create({
-        model: process.env.OPENAI_API_MODEL || "gpt-4-0613",
+        model: process.env.OPENAI_API_MODEL,
         messages: [
           ...messages,
           { role: "assistant", content: null, function_call: fc },

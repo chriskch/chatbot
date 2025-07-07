@@ -1,0 +1,238 @@
+{
+  "numTotalTestSuites": 8,
+  "numPassedTestSuites": 8,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 19,
+  "numPassedTests": 19,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1751464788481,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module findet Kunden anhand von E-Mail",
+          "status": "passed",
+          "title": "findet Kunden anhand von E-Mail",
+          "duration": 9.315917015075684,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module findet Kunden anhand von Namen (unscharf)",
+          "status": "passed",
+          "title": "findet Kunden anhand von Namen (unscharf)",
+          "duration": 1.6019999980926514,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module wirft Fehler, wenn Kunde nicht existiert",
+          "status": "passed",
+          "title": "wirft Fehler, wenn Kunde nicht existiert",
+          "duration": 2.0828750133514404,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module aktualisiert den Kundennamen",
+          "status": "passed",
+          "title": "aktualisiert den Kundennamen",
+          "duration": 3.442541003227234,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module aktualisiert die E-Mail-Adresse",
+          "status": "passed",
+          "title": "aktualisiert die E-Mail-Adresse",
+          "duration": 16.57670795917511,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module aktualisiert die Telefonnummer",
+          "status": "passed",
+          "title": "aktualisiert die Telefonnummer",
+          "duration": 1.4155420064926147,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module erstellt ein neues Support-Ticket",
+          "status": "passed",
+          "title": "erstellt ein neues Support-Ticket",
+          "duration": 5.409999966621399,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module lädt alle Support-Tickets eines Kunden (inkl. Seed)",
+          "status": "passed",
+          "title": "lädt alle Support-Tickets eines Kunden (inkl. Seed)",
+          "duration": 5.743875026702881,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["CRM Module"],
+          "fullName": "CRM Module ändert den Status eines Support-Tickets",
+          "status": "passed",
+          "title": "ändert den Status eines Support-Tickets",
+          "duration": 2.9448330402374268,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1751464788925,
+      "endTime": 1751464788973.9448,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/ckoch/Development/chatbot/tests/unit/crm.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["OMS Module"],
+          "fullName": "OMS Module creates an order with products",
+          "status": "passed",
+          "title": "creates an order with products",
+          "duration": 29.97208297252655,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["OMS Module"],
+          "fullName": "OMS Module returns status information for an order",
+          "status": "passed",
+          "title": "returns status information for an order",
+          "duration": 6.1507920026779175,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["OMS Module"],
+          "fullName": "OMS Module successfully cancels an order",
+          "status": "passed",
+          "title": "successfully cancels an order",
+          "duration": 4.853625059127808,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["OMS Module"],
+          "fullName": "OMS Module returns all orders for a customer with product details",
+          "status": "passed",
+          "title": "returns all orders for a customer with product details",
+          "duration": 23.457041025161743,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1751464788925,
+      "endTime": 1751464788989.457,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/ckoch/Development/chatbot/tests/unit/oms.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Payment Module"],
+          "fullName": "Payment Module returns 'unpaid' if no payment exists",
+          "status": "passed",
+          "title": "returns 'unpaid' if no payment exists",
+          "duration": 20.882499933242798,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Payment Module"],
+          "fullName": "Payment Module returns the payment status when a payment exists",
+          "status": "passed",
+          "title": "returns the payment status when a payment exists",
+          "duration": 11.185791969299316,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Payment Module"],
+          "fullName": "Payment Module refunds a paid order",
+          "status": "passed",
+          "title": "refunds a paid order",
+          "duration": 3.626792073249817,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["Payment Module"],
+          "fullName": "Payment Module does not refund if payment is not 'paid'",
+          "status": "passed",
+          "title": "does not refund if payment is not 'paid'",
+          "duration": 3.123708963394165,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1751464788925,
+      "endTime": 1751464788964.1238,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/ckoch/Development/chatbot/tests/unit/payment.test.js"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["PMS Module"],
+          "fullName": "PMS Module returns details for a product",
+          "status": "passed",
+          "title": "returns details for a product",
+          "duration": 5.534124970436096,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["PMS Module"],
+          "fullName": "PMS Module throws an error if product does not exist",
+          "status": "passed",
+          "title": "throws an error if product does not exist",
+          "duration": 3.802541971206665,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1751464788925,
+      "endTime": 1751464788934.8025,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/ckoch/Development/chatbot/tests/unit/pms.test.js"
+    }
+  ]
+}

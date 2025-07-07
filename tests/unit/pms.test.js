@@ -1,19 +1,24 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { prisma } from "@/configs/prisma";
 import { getProductDetails } from "@/lib/functions/pms";
+import { testContext } from "./testContext";
 
-describe("PMS-Funktionen", () => {
+describe("PMS Module", () => {
   let products;
 
   beforeEach(async () => {
-    // use globally seeded products
+    // Lade die globalen Produkte aus dem testContext
     products = await prisma.product.findMany({
-      where: { id: { in: globalThis.testProductIds } },
+      where: { id: { in: testContext.productIds } },
       orderBy: { id: "asc" },
     });
+
+    if (products.length === 0) {
+      throw new Error("❌ Seed data missing. Run `npm run seed` first.");
+    }
   });
 
-  it("liefert Details zu einem Produkt", async () => {
+  it("returns details for a product", async () => {
     const result = await getProductDetails({ product_id: products[0].id });
 
     expect(result).toMatchObject({
@@ -24,9 +29,7 @@ describe("PMS-Funktionen", () => {
     });
   });
 
-  it("wirft Fehler, wenn Produkt nicht existiert", async () => {
-    await expect(getProductDetails({ product_id: 9999 })).rejects.toThrow(
-      "Product not found"
-    );
+  it("throws an error if product does not exist", async () => {
+    await expect(getProductDetails({ product_id: 9999 })).rejects.toThrow("Product not found");
   });
 });

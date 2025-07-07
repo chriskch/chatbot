@@ -1,0 +1,8 @@
+# prompt-tests/scenarios/regression.snapshot.yaml
+prompts:
+  - "Was kostet der Bluetooth Lautsprecher?"
+model:
+  provider: openai
+  model: gpt-4o
+expected:
+  - type: snapshot

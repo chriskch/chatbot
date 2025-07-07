@@ -3,7 +3,11 @@ import { defineConfig } from "vitest/config";
 import path from "path";
 import { config } from "dotenv";
 
-config({ path: ".env.test" });
+// Entscheide dynamisch, welche .env geladen wird
+const envFile = process.env.CI === "true" ? ".env.test" : ".env";
+
+console.log(`✅ Loading environment variables from ${envFile}`);
+config({ path: envFile });
 
 export default defineConfig({
   test: {
@@ -12,7 +16,7 @@ export default defineConfig({
     sequence: {
       hooks: "stack",
     },
-    setupFiles: ["./tests/setup.js"],
+    setupFiles: ["./tests/unit/setup.js"],
   },
   resolve: {
     alias: {
