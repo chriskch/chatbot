@@ -29,7 +29,7 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@vitest/ui": "^3.1.4",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "dotenv-cli": "^8.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
