@@ -63,14 +63,14 @@ jobs:
       - name: Run security tests
         run: docker compose --env-file .env.test run --rm test-runner pytest tests/security/security.py --junitxml=tests/reports/security/test_results.xml
 
-      - name: Upload reports to FTP server
-        uses: sebastianpopp/ftp-action@v1
+      - name: Upload Reports
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          host: ${{ secrets.FTP_HOST }}
-          user: ${{ secrets.FTP_USERNAME }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          localDir: tests/reports
-          remoteDir: ${{ secrets.FTP_REMOTE_PATH }}
+          local-dir: tests/reports
+          server-dir: ${{ secrets.FTP_REMOTE_PATH }}
 
       - name: Shut down Docker Compose
         run: docker compose --env-file .env.test down
