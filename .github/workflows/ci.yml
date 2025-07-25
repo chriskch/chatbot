@@ -69,7 +69,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: tests/reports
+          local-dir: tests/reports/
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}
 
       - name: Shut down Docker Compose
