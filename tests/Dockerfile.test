@@ -9,4 +9,4 @@ COPY tests/performance ./tests/performance
 # Install dependencies
 RUN pip install --no-cache-dir pytest requests presidio-analyzer locust python-dotenv
 
-CMD ["pytest", "security_tests/"]  # Default, überschreibbar
+CMD ["pytest"]  # Default, überschreibbar
