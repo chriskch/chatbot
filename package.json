@@ -10,10 +10,7 @@
     "lint": "next lint",
     "migrate": "dotenv -e .env.test -- npx prisma db push",
     "seed": "npx prisma db seed",
-    "test": "vitest run --reporter=default --reporter=json --outputFile=./tests/reports/unit/unit-report.json",
-    "loadtest": "locust -f ./tests/performance/locustfile.py --host=http://localhost:3000 --headless -u 3 -r 2 -t 30s --csv=tests/reports/locust/locust-report",
-    "fairness": "python3 ./tests/bias/fairness.py",
-    "promptfoo": "npx promptfoo eval --config /tests/prompts/promptfooconfig.yaml --output tests/reports/promptfoo-report.json"
+    "test": "vitest run --reporter=default --reporter=json --outputFile=./tests/reports/unit/unit-report.json"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
