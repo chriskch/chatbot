@@ -1,0 +1,12 @@
+# Dockerfile.tests
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY security_tests/ ./security_tests
+COPY performance_tests/ ./performance_tests
+
+# Install dependencies
+RUN pip install --no-cache-dir pytest requests presidio-analyzer locust python-dotenv
+
+CMD ["pytest", "security_tests/"]  # Default, überschreibbar

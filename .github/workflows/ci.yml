@@ -51,14 +51,17 @@ jobs:
           done
           echo "App is ready."
 
-      - name: Run database migrations in container
+      - name: Run database migrations
         run: docker compose --env-file .env.test exec -T app npm run migrate
 
-      - name: Run seed script in container
+      - name: Run seed script
         run: docker compose --env-file .env.test exec -T app npm run seed
 
-      - name: Run unit tests in container
+      - name: Run unit tests
         run: docker compose --env-file .env.test exec -T app npm run test
+
+      - name: Run security tests
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/security/security.py --junitxml=tests/reports/security/test_results.xml
 
       - name: Shut down Docker Compose
         run: docker compose --env-file .env.test down
