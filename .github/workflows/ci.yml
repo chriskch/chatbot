@@ -64,7 +64,7 @@ jobs:
         run: docker compose --env-file .env.test run --rm test-runner pytest tests/security/security.py --junitxml=tests/reports/security/test_results.xml
 
       - name: Run performance tests
-        run: docker compose --env-file .env.test run --rm test-runner locust -f ./tests/performance/locustfile.py --headless -u 3 -r 2 -t 30s --csv=tests/reports/performance/locust
+        run: docker compose --env-file .env.test run --rm test-runner locust -f tests/performance/locustfile.py --headless -u 3 -r 2 -t 30s --csv=tests/reports/performance/locust
 
       - name: Upload Reports
         run: |
