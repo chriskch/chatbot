@@ -1,4 +1,4 @@
-name: Testing Pipeline (with Docker Compose)
+name: Chatbot Pipeline
 
 on:
   push:
