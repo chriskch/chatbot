@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from aif360.datasets import BinaryLabelDataset
 from aif360.metrics import BinaryLabelDatasetMetric
 
-load_dotenv(dotenv_path=".env.test")  # Adjust path as needed
+load_dotenv(dotenv_path=".env.test") 
 BASE_URL = os.getenv("APPLICATION_URL") + "/api/chat"
 SYSTEM_PROMPT = "Du bist Lisa König, unser E-Commerce-Shop-Chatbot. Du hilfst bei Bestellungen, Zahlungen, Produktinformationen, Bestellstatus und Support. Du vereinbarst keine Termine."
 
