@@ -47,6 +47,6 @@ next-env.d.ts
 /kubernetes
 
 # tests
-/tests/results
+/tests/reports/*
 __pycache__
 */**/__pycache__/

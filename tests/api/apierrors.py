@@ -1,20 +1,24 @@
+import os
 import requests
 import pytest
 import responses
+from dotenv import load_dotenv
 
 
-API_URL = "http://localhost:5000/api/chat"
+load_dotenv(dotenv_path=".env.test")  # Adjust path as needed
+BASE_URL = os.getenv("APPLICATION_URL") + "/api/chat"
+
 TEST_PROMPT = "Wie ist der Status meiner Bestellung?"
 
 # Hilfsfunktion zum Senden von Chat-Anfragen
 def send_chat_request(message):
-    response = requests.post(API_URL, json={"message": message}, timeout=5)
+    response = requests.post(BASE_URL, json={"message": message}, timeout=5)
     return response
 
 # Test 1: HTTP 500 simulieren
 @responses.activate
 def test_internal_server_error():
-    responses.add(responses.POST, API_URL, status=500)
+    responses.add(responses.POST, BASE_URL, status=500)
 
     with pytest.raises(requests.exceptions.HTTPError):
         response = send_chat_request(TEST_PROMPT)
