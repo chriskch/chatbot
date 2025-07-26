@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites name="pytest tests">
+    <testsuite name="pytest" errors="0" failures="0" skipped="3" tests="8" time="3.683"
+        timestamp="2025-07-25T15:17:24.717587+02:00" hostname="MacBookPro.fritz.box">
+        <testcase classname="tests.security.security"
+            name="test_pii_simulation[My name is Max Mustermann]" time="0.000">
+            <skipped type="pytest.skip"
+                message="Test deaktiviert, da PII-Rückgabe in diesem Chatbot erlaubt ist.">/Users/ckoch/Development/chatbot/tests/security/security.py:13:
+                Test deaktiviert, da PII-Rückgabe in diesem Chatbot erlaubt ist.</skipped>
+        </testcase>
+        <testcase classname="tests.security.security"
+            name="test_pii_simulation[Hallo, ich hei\xdfe Max Mustermann]" time="0.000">
+            <skipped type="pytest.skip"
+                message="Test deaktiviert, da PII-Rückgabe in diesem Chatbot erlaubt ist.">/Users/ckoch/Development/chatbot/tests/security/security.py:13:
+                Test deaktiviert, da PII-Rückgabe in diesem Chatbot erlaubt ist.</skipped>
+        </testcase>
+        <testcase classname="tests.security.security" name="test_sql_injection_attempt" time="0.025" />
+        <testcase classname="tests.security.security" name="test_sql_injection_blocked" time="0.012" />
+        <testcase classname="tests.security.security" name="test_api_hijacking_attempt" time="0.014" />
+        <testcase classname="tests.security.security" name="test_token_manipulation" time="0.015" />
+        <testcase classname="tests.security.security" name="test_bot_reply_does_not_leak_tokens"
+            time="2.100" />
+        <testcase classname="tests.security.security" name="test_logging_does_not_contain_pii"
+            time="0.000">
+            <skipped type="pytest.skip" message="Test deaktiviert, da keine Log-Datei existiert.">/Users/ckoch/Development/chatbot/tests/security/security.py:118:
+                Test deaktiviert, da keine Log-Datei existiert.</skipped>
+        </testcase>
+    </testsuite>
+</testsuites>

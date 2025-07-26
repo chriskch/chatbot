@@ -1,4 +1,4 @@
-name: Testing Pipeline (with Docker Compose)
+name: Chatbot Pipeline
 
 on:
   push:
@@ -51,14 +51,34 @@ jobs:
           done
           echo "App is ready."
 
-      - name: Run database migrations in container
+      - name: Run database migrations
         run: docker compose --env-file .env.test exec -T app npm run migrate
 
-      - name: Run seed script in container
+      - name: Run seed script
         run: docker compose --env-file .env.test exec -T app npm run seed
 
-      - name: Run unit tests in container
+      - name: Run unit tests
         run: docker compose --env-file .env.test exec -T app npm run test
+
+      - name: Run security tests
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/security/security.py --junitxml=tests/reports/security/test_results.xml
+
+      - name: Run performance tests
+        run: docker compose --env-file .env.test run --rm test-runner locust -f tests/performance/locustfile.py --headless -u 3 -r 2 -t 30s --csv=tests/reports/performance/locust
+
+      - name: Upload Reports
+        run: |
+          sudo apt-get update && sudo apt-get install -y lftp
+          TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+          lftp -u "${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }}" ${{ secrets.FTP_HOST }} <<EOF
+            set ftp:passive-mode on
+            set net:max-retries 2
+            set net:persist-retries 1
+            set ftp:ssl-allow no
+            mkdir -p ${{ secrets.FTP_REMOTE_PATH }}/$TIMESTAMP
+            mirror -R tests/reports ${{ secrets.FTP_REMOTE_PATH }}/$TIMESTAMP
+            quit
+          EOF
 
       - name: Shut down Docker Compose
         run: docker compose --env-file .env.test down

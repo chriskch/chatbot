@@ -1,9 +1,13 @@
+import os
+from dotenv import load_dotenv
 from locust import HttpUser, task, constant
 from random import choice
 
+load_dotenv(dotenv_path=".env.test")
 
 class ChatbotUser(HttpUser):
     wait_time = constant(1)  # Wartezeit zwischen den Requests
+    host = os.getenv("APPLICATION_URL")
 
     prompts = [
         {

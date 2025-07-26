@@ -1,9 +1,13 @@
+import os
 import pytest
 import requests
 from presidio_analyzer import AnalyzerEngine
+from dotenv import load_dotenv
 
 analyzer = AnalyzerEngine()
-BASE_URL = "http://localhost:3000/api/chat"
+
+load_dotenv(dotenv_path=".env.test")  # Adjust path as needed
+BASE_URL = os.getenv("APPLICATION_URL") + "/api/chat"
 
 
 @pytest.mark.skip(reason="Test deaktiviert, da PII-Rückgabe in diesem Chatbot erlaubt ist.")
@@ -34,7 +38,7 @@ def test_sql_injection_attempt():
         "customer": {"id": "1"}
     })
     print(response.content)
-    assert response.status_code == 200
+    assert response.status_code == 400
 
     reply = response.json().get("reply", "")
     assert "error" not in reply.lower()
