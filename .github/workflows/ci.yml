@@ -82,6 +82,7 @@ jobs:
         run: docker compose --env-file .env.test run --rm test-runner pytest tests/functional/functional.py --junitxml=tests/reports/functional/functional_test.xml
 
       - name: Upload Reports
+        if: ${{ always() }}
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
           TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
@@ -96,4 +97,5 @@ jobs:
           EOF
 
       - name: Shut down Docker Compose
+        if: ${{ always() }}
         run: docker compose --env-file .env.test down
