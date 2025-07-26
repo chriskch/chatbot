@@ -66,6 +66,9 @@ jobs:
       - name: Run performance tests
         run: docker compose --env-file .env.test run --rm test-runner locust -f tests/performance/locustfile.py --headless -u 3 -r 2 -t 30s --csv=tests/reports/performance/locust
 
+      - name: Run API tests
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/api/apierrors.py --junitxml=tests/reports/api/test_results.xml
+
       - name: Upload Reports
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
