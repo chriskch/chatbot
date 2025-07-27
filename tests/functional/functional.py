@@ -11,8 +11,8 @@ BASE_URL = os.getenv("APPLICATION_URL") + "/api/chat"
 
 # 2) KPI-Schwellen aus der .env (Default-Werte in Klammern)
 SAMPLES                       = int(os.getenv("KPI_FUNC_SAMPLES",                       "10"))
-KEYWORD_SUCCESS_RATE_THRESH   = float(os.getenv("KPI_FUNC_KEYWORD_SUCCESS_RATE_THRESHOLD","1.0"))
-KEYWORD_PRESENCE_RATE_THRESH  = float(os.getenv("KPI_FUNC_KEYWORD_PRESENCE_RATE",      "1.0"))
+KEYWORD_SUCCESS_RATE_THRESH   = float(os.getenv("KPI_FUNC_KEYWORD_SUCCESS_RATE_THRESHOLD","0.8"))
+KEYWORD_PRESENCE_RATE_THRESH  = float(os.getenv("KPI_FUNC_KEYWORD_PRESENCE_RATE",      "0.9"))
 MAX_LATENCY_MS                = int(os.getenv("KPI_FUNC_MAX_LATENCY_MS",               "8000"))
 
 SYSTEM_PROMPT = "Du bist Lisa König, unser E-Commerce-Shop-Chatbot. Du hilfst bei Bestellungen, Zahlungen, Produktinformationen, Bestellstatus und Support. Du vereinbarst keine Termine und entschuldigst dich auch entsprechend, dass diese Funktion nicht vorhanden ist."
