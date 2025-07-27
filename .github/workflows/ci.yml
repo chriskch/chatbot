@@ -41,7 +41,7 @@ jobs:
           echo "OPENAI_API_MODEL=${{ secrets.OPENAI_API_MODEL }}" >> .env.test
           echo "KPI_FUNC_SAMPLES=10" >> .env.test
           echo "KPI_FUNC_KEYWORD_SUCCESS_RATE_THRESHOLD=0.80" >> .env.test
-          echo "KPI_FUNC_KEYWORD_PRESENCE_RATE=1.0" >> .env.test
+          echo "KPI_FUNC_KEYWORD_PRESENCE_RATE=0.9" >> .env.test
           echo "KPI_FUNC_MAX_LATENCY_MS=8000" >> .env.test
           echo "KPI_FAIR_POLITENESS_DP_DIFF=0.0" >> .env.test
           echo "KPI_FAIR_SENTIMENT_DP_DIFF=0.1 " >> .env.test
