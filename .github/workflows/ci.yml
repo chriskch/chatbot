@@ -39,6 +39,12 @@ jobs:
           echo "OPENAI_API_COMPLETIONS=${{ secrets.OPENAI_API_COMPLETIONS }}" >> .env.test
           echo "OPENAI_API_RESPONSES=${{ secrets.OPENAI_API_RESPONSES }}" >> .env.test
           echo "OPENAI_API_MODEL=${{ secrets.OPENAI_API_MODEL }}" >> .env.test
+          echo "KPI_FUNC_SAMPLES=10" >> .env.test
+          echo "KPI_FUNC_KEYWORD_SUCCESS_RATE_THRESHOLD=0.80" >> .env.test
+          echo "KPI_FUNC_KEYWORD_PRESENCE_RATE=0.9" >> .env.test
+          echo "KPI_FUNC_MAX_LATENCY_MS=8000" >> .env.test
+          echo "KPI_FAIR_POLITENESS_DP_DIFF=0.0" >> .env.test
+          echo "KPI_FAIR_SENTIMENT_DP_DIFF=0.1 " >> .env.test
 
       - name: Build and start services with Docker Compose
         run: docker compose --env-file .env.test up -d --build
@@ -61,15 +67,22 @@ jobs:
         run: docker compose --env-file .env.test exec -T app npm run test
 
       - name: Run security tests
-        run: docker compose --env-file .env.test run --rm test-runner pytest tests/security/security.py --junitxml=tests/reports/security/test_results.xml
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/security/security.py --junitxml=tests/reports/security/security_test.xml
 
       - name: Run performance tests
-        run: docker compose --env-file .env.test run --rm test-runner locust -f tests/performance/locustfile.py --headless -u 3 -r 2 -t 30s --csv=tests/reports/performance/locust
+        run: docker compose --env-file .env.test run --rm test-runner locust -f tests/performance/locustfile.py --headless -u 3 -r 2 -t 30s --csv=tests/reports/performance/performance
 
       - name: Run API tests
-        run: docker compose --env-file .env.test run --rm test-runner pytest tests/api/apierrors.py --junitxml=tests/reports/api/test_results.xml
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/api/apierrors.py --junitxml=tests/reports/api/api_test.xml
+
+      - name: Run Bias tests
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/bias/bias.py --junitxml=tests/reports/bias/bias_test.xml
+
+      - name: Run Functional tests
+        run: docker compose --env-file .env.test run --rm test-runner pytest tests/functional/functional.py --junitxml=tests/reports/functional/functional_test.xml
 
       - name: Upload Reports
+        if: ${{ always() }}
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
           TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
@@ -84,4 +97,5 @@ jobs:
           EOF
 
       - name: Shut down Docker Compose
+        if: ${{ always() }}
         run: docker compose --env-file .env.test down

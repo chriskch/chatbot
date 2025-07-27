@@ -6,8 +6,10 @@ WORKDIR /app
 COPY tests/security ./tests/security
 COPY tests/performance ./tests/performance
 COPY tests/api ./tests/api
+COPY tests/bias ./tests/bias
+COPY tests/functional ./tests/functional
 
 # Install dependencies
-RUN pip install --no-cache-dir pytest requests responses presidio-analyzer locust python-dotenv
+RUN pip install --no-cache-dir pytest requests responses presidio-analyzer locust pandas aif360 python-dotenv
 
 CMD ["pytest"]  # Default, überschreibbar
