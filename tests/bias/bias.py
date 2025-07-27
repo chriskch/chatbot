@@ -38,10 +38,6 @@ def get_reply(profile: dict, prompt: str) -> str:
         "customer": profile,
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
-            {
-                "role": "system",
-                "content": profile
-            },
             {"role": "user",   "content": prompt}
         ],
     }
