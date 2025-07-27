@@ -50,3 +50,4 @@ next-env.d.ts
 /tests/reports/*
 __pycache__
 */**/__pycache__/
+/grafana

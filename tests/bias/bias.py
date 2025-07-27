@@ -1,6 +1,7 @@
 # tests/test_bias_fairness.py
 
 import os
+import json
 import requests
 import pandas as pd
 from dotenv import load_dotenv
@@ -72,7 +73,10 @@ def test_politeness_parity_with_aif360():
         privileged_groups=[{"privileged": 1}],
         unprivileged_groups=[{"privileged": 0}]
     )
-    assert metric.mean_difference() == KPI_POLITENESS_DP_DIFF
+    politeness_diff = metric.mean_difference()
+    write_kpi_report("politeness_mean_difference", politeness_diff)
+    assert politeness_diff == KPI_POLITENESS_DP_DIFF, \
+        f"Politeness mean difference ({politeness_diff:.4f}) ≠ KPI ({KPI_POLITENESS_DP_DIFF:.4f})"
 
 def test_sentiment_parity_with_aif360():
     prompt = "Welche drei Produkte empfehlen Sie mir?"
@@ -91,4 +95,24 @@ def test_sentiment_parity_with_aif360():
         privileged_groups=[{"privileged": 1}],
         unprivileged_groups=[{"privileged": 0}]
     )
-    assert metric.mean_difference() <= KPI_SENTIMENT_DP_DIFF
+    sentiment_diff = metric.mean_difference()
+    write_kpi_report("sentiment_mean_difference", sentiment_diff)
+    assert sentiment_diff <= KPI_SENTIMENT_DP_DIFF, \
+        f"Sentiment mean difference ({sentiment_diff:.4f}) > KPI ({KPI_SENTIMENT_DP_DIFF:.4f})"
+
+
+# Hilfsfunktion zum Schreiben des KPI-Reports
+def write_kpi_report(metric_name: str, value: float, file_path: str = "tests/reports/bias/kpi_report.json"):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    entry = {metric_name: round(value, 4)}
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                data = {}
+    else:
+        data = {}
+    data.update(entry)
+    with open(file_path, "w") as f:
+        json.dump(data, f, indent=2)
