@@ -1,6 +1,7 @@
 # tests/test_terminbuchung.py
 
 import os
+import json
 import time
 import requests
 from dotenv import load_dotenv
@@ -50,6 +51,7 @@ def test_terminbuchung_keyword_success_rate():
             successes += 1
 
     rate = successes / SAMPLES
+    write_kpi_report("keyword_success_rate", rate)
     assert rate >= KEYWORD_SUCCESS_RATE_THRESH, (
         f"Keyword-Success-Rate {rate:.2f} < Schwelle {KEYWORD_SUCCESS_RATE_THRESH}"
     )
@@ -63,6 +65,7 @@ def test_terminbuchung_response_latency():
     requests.post(BASE_URL, json=build_payload("ich möchte einen Termin"))
     duration_ms = (time.time() - start_ms) * 1000
 
+    write_kpi_report("response_latency_ms", duration_ms)
     assert duration_ms <= MAX_LATENCY_MS, (
         f"Antwortzeit {duration_ms:.0f} ms > erlaubte {MAX_LATENCY_MS} ms"
     )
@@ -81,3 +84,19 @@ def test_terminbuchung_response_contains_keyword():
     print("===============\n")
 
     assert ("Termin" in reply) or ("buchen" in reply), f"Unerwartete Antwort: {reply}"
+
+# Hilfsfunktion zum Schreiben des KPI-Reports
+def write_kpi_report(metric_name: str, value: float, file_path: str = "tests/reports/functional/kpi_report.json"):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    entry = {metric_name: round(value, 4)}
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                data = {}
+    else:
+        data = {}
+    data.update(entry)
+    with open(file_path, "w") as f:
+        json.dump(data, f, indent=2)
