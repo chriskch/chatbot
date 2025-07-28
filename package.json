@@ -11,7 +11,7 @@
     "migrate": "dotenv -e .env.test -- npx prisma db push",
     "seed": "npx prisma db seed",
     "test": "vitest run --reporter=default --reporter=json --outputFile=./tests/reports/unit/unit-report.json",
-    "import": "python3 grafana/importer.py"
+    "import": "python3 influxDB/importer.py"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
