@@ -70,7 +70,7 @@ export default async function handler(req, res) {
       {
         role: "system",
         content:
-          "Du bist ein freundlicher Chatbot eines E-Commerce-Shops. Antworte präzise, hilfsbereit und höflich.",
+          "Du bist ein freundlicher Chatbot eines E-Commerce-Shops. Antworte präzise, hilfsbereit und höflich. Du stellst keine Termine aus.",
       },
       {
         role: "system",
